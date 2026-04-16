@@ -102,14 +102,14 @@ function SubjectList() {
       <h1 className="page-title">Subject</h1>
 
       <div className="intro-row">
-        <p>Quick access to essential metrics and managment tools.</p>
+        <p>Quick access to essential metrics and management tools.</p>
         <div className="actions-row">
           <div className="search-field">
             <Search className="search-icon" />
             <input
               type="text"
               placeholder="Search by name..."
-              className="pl-10 w-full p-1 border-2"
+              className="pl-10 w-full p-1 rounded-md border border-muted focus:border-primary focus:ring-1 focus:ring-primary"
               value={searchQuery}
               onChange={(e) => {
                 setsearchQuery(e.target.value);

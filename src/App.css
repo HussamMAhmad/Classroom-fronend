@@ -183,7 +183,7 @@
             }
 
             .placeholder {
-                @apply h-72 w-full bg-slate-200;
+                @apply h-72 w-full bg-muted;
             }
         }
 

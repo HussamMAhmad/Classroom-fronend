@@ -6,14 +6,33 @@ import {
   GetListResponse,
 } from "@refinedev/core";
 
-export const MockDataProvider : Subject[] = [{
-  id: 1,
-  name: "Mathematics",
-  code: "MATH101",
-  description: "An introduction to mathematical concepts and techniques.",
-  department: "Mathematics",
-  createAt: new Date().toISOString(),
-}];
+export const MockDataProvider: Subject[] = [
+  {
+    id: 1,
+    name: "Mathematics",
+    code: "MATH101",
+    description: "An introduction to mathematical concepts and techniques.",
+    department: "Mathematics",
+    createAt: new Date().toISOString(),
+  },
+  {
+    id: 2,
+    name: "hussam",
+    code: "ENG101",
+    description: "An introduction to English literature and language.",
+    department: "English",
+    createAt: new Date().toISOString(),
+  },
+  {
+    id: 3,
+    name: "Computer Science",
+    code: "CS101",
+    description:
+      "An introduction to computer science principles and programming.",
+    department: "CS",
+    createAt: new Date().toISOString(),
+  },
+];
 
 export const dataProvider: DataProvider = {
   getList: async <TData extends BaseRecord = BaseRecord>({
