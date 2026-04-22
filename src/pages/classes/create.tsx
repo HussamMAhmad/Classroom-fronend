@@ -26,8 +26,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import UploadWidget from "@/components/upload-widget/upload-widget";
 
 function ClassesCreate() {
   const back = useBack();
@@ -82,7 +82,7 @@ function ClassesCreate() {
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting , errors},
     control,
   } = form;
 
@@ -93,17 +93,32 @@ function ClassesCreate() {
       console.log("Error creating class:", e);
     }
   };
-
+  const bannerPublicId = form.watch("bannerCldPubId");
+  const setBannerImage = (file : any, field : any) => {
+    if (file) {
+      field.onChange(file.url);
+      form.setValue("bannerCldPubId", file.publicId, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }else{
+      field.onChange("");
+      form.setValue("bannerCldPubId", "", {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  };
   return (
     <CreateView>
       <Breadcrumb />
-      <h1 className="page-title">Create New Classes</h1>
+      <h1 className="page-title">Create New Class</h1>
       <div className="intro-row">
         <p>Provide the required information to create a new class.</p>
         <Button>Go Back</Button>
       </div>
       <Separator />
-      <div className="my-4 flex itmes-center">
+      <div className="my-4 flex items-center">
         <Card className="class-form-card">
           <CardHeader className="relative z-10">
             <CardTitle className="text-2xl pb-0 font-bold">
@@ -114,12 +129,35 @@ function ClassesCreate() {
           <CardContent className="mt-7">
             <Form {...form}>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                <div className="space-y-3">
-                  <Label>
-                    Banner Image <span className="text-orange-600">*</span>
-                  </Label>
-                  <p>Upload image widget</p>
-                </div>
+                <FormField
+                  control={control}
+                  name="bannerUrl"
+                  render={({ field }) => {
+                    console.log("Banner URL field value:", field.value);
+                    console.log("the field object is:", field);
+                    return (
+                      <FormItem>
+                        <FormLabel>
+                          Banner Image{" "}
+                          <span className="text-orange-600">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <UploadWidget
+                            onChange={(file: any, field: any) =>
+                              setBannerImage(file, field)
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                        {errors.bannerCldPubId && !errors.bannerUrl && (
+                          <p className="text-sm text-destructive">
+                            {errors.bannerCldPubId.message?.toString()}
+                          </p>
+                        )}
+                      </FormItem>
+                    );
+                  }}
+                />
                 <FormField
                   control={control}
                   name="name"
@@ -279,7 +317,9 @@ function ClassesCreate() {
                 />
                 <Separator />
                 <div className="flex justify-end space-x-2">
-                  <Button type="submit" className="w-full">Submit</Button>
+                  <Button type="submit" className="w-full">
+                    Submit
+                  </Button>
                 </div>
               </form>
             </Form>
