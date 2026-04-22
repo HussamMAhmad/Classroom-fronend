@@ -1,9 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { UploadWidgetValue } from "@/types";
+import { UploadWidgetValue, UploadWidgetProps } from "@/types";
 import { Upload } from "lucide-react";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "@/constants";
+import { Button } from "@/components/ui/button";
 
-function UploadWidget({ value = null, onChange, disabled = false }: any) {
+function UploadWidget({
+  value = null,
+  onChange,
+  disabled = false,
+}: UploadWidgetProps) {
   const widgetRef = useRef<CloudinaryWidget | null>(null);
   const onChangeRef = useRef(onChange);
   const [preview, setPreview] = useState<UploadWidgetValue | null>(value);
@@ -27,7 +32,7 @@ function UploadWidget({ value = null, onChange, disabled = false }: any) {
           uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: false,
           folder: "uploads",
-          maxFielSize: 5000000,
+          maxFileSize: 5000000,
           clientAllowedFormats: ["png", "jpg", "jpeg", "webp"],
         },
         (error, result) => {
@@ -45,7 +50,6 @@ function UploadWidget({ value = null, onChange, disabled = false }: any) {
     };
 
     if (intializeWidget()) return;
-
     const intervalId = window.setInterval(() => {
       if (intializeWidget()) {
         window.clearInterval(intervalId);
@@ -62,7 +66,17 @@ function UploadWidget({ value = null, onChange, disabled = false }: any) {
     <div>
       {preview ? (
         <div className="upload-preview">
-            <img src={preview.url} alt="Upload file" />
+          <Button
+            type="button"
+            disabled={disabled}
+            onClick={() => {
+              setPreview(null);
+              onChangeRef.current?.(null);
+            }}
+          >
+            Remove image
+          </Button>
+          <img src={preview.url} alt="Selected banner preview" />
         </div>
       ) : (
         <div
