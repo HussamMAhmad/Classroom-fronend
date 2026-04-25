@@ -143,7 +143,13 @@ function ClassesCreate() {
                         </FormLabel>
                         <FormControl>
                           <UploadWidget
-                            onChange={(file: any, field: any) =>
+                            value={
+                              field.value?{
+                                    url: field.value,
+                                    publicId: bannerPublicId ?? "",
+                                  } : null 
+                            }
+                            onChange={(file: any) =>
                               setBannerImage(file, field)
                             }
                           />
@@ -318,7 +324,7 @@ function ClassesCreate() {
                 <Separator />
                 <div className="flex justify-end space-x-2">
                   <Button type="submit" className="w-full">
-                    Submit
+                    Create Class
                   </Button>
                 </div>
               </form>

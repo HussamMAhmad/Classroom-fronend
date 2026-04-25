@@ -23,7 +23,6 @@ function UploadWidget({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-
     const intializeWidget = () => {
       if (!window.cloudinary || widgetRef.current) return false;
       widgetRef.current = window.cloudinary.createUploadWidget(
@@ -48,17 +47,14 @@ function UploadWidget({
       );
       return true;
     };
-
     if (intializeWidget()) return;
     const intervalId = window.setInterval(() => {
       if (intializeWidget()) {
         window.clearInterval(intervalId);
       }
     }, 500);
-
     return () => window.clearInterval(intervalId);
   }, []);
-
   const openWidget = () => {
     if (!disabled) widgetRef.current?.open();
   };

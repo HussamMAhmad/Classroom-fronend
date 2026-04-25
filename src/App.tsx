@@ -72,14 +72,12 @@ function App() {
                       element={<SubjectCreate />}
                     />
                   </Route>
-                     <Route path="classes">
+
+                  <Route path="classes">
                     <Route index element={<ClassesList />} />
-                    <Route
-                      path="/classes/create"
-                      element={<ClassesCreate />}
-                    />
+                    <Route path="/classes/create" element={<ClassesCreate />} />
                   </Route>
-                
+                  
                 </Route>
               </Routes>
               <Toaster />
