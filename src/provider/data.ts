@@ -1,7 +1,6 @@
 import { CreateDataProviderOptions, createDataProvider } from "@refinedev/rest";
-import { HttpError } from "@refinedev/core";
 import { BACKEND_BASE_URL } from "@/constants";
-import { ListResponse } from "@/types";
+import { CreateResponse, ListResponse } from "@/types";
 
 const buildHttpError = async (response: Response) => {
   let message = "Request Failed";
@@ -38,6 +37,10 @@ const options: CreateDataProviderOptions = {
           if (field === "department") query.department = value;
           if (field === "name" || field === "code") query.search = value;
         }
+
+        if (resource === "users") {
+          if (field === "role") query.role = value;
+        }
       }
       return query;
     },
@@ -52,6 +55,18 @@ const options: CreateDataProviderOptions = {
       if (!response.ok) throw await buildHttpError(response);
       const payload: ListResponse = await response.json();
       return payload.pagination?.total ?? payload.data?.length ?? 0;
+    },
+  },
+
+  create: {
+    getEndpoint: ({ resource }) => resource,
+
+    buildBodyParams: async ({ variables }) => variables,
+
+    mapResponse: async (response) => {
+      if (!response.ok) throw await buildHttpError(response);
+      const payload: CreateResponse = await response.json();
+      return payload.data ?? [];
     },
   },
 };
