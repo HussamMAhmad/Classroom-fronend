@@ -175,7 +175,6 @@ function ClassesList() {
       },
     },
   });
-
   return (
     <ListView>
       <Breadcrumb />
