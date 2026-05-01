@@ -13,7 +13,7 @@ import { CreateButton } from "@/components/refine-ui/buttons/create";
 import { useMemo, useState } from "react";
 import { DataTable } from "@/components/refine-ui/data-table/data-table";
 import { useTable } from "@refinedev/react-table";
-import { ClassDetails , Schedule , Department} from "@/types";
+import { ClassDetails} from "@/types";
 import type { ColumnDef } from "@tanstack/react-table";
 
 function ClassesList() {
@@ -140,7 +140,7 @@ function ClassesList() {
           size: 150,
           header: () => <p className="column-title ml-2">department</p>,
           cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<Department>()}</p>
+            <p className="text-foreground">{getValue<string>()}</p>
           ),
         },
         {
@@ -149,7 +149,7 @@ function ClassesList() {
           size: 200,
           header: () => <p className="column-title ml-2">schedules</p>,
           cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<Schedule>()}</p>
+            <p className="text-foreground">{getValue<string>()}</p>
           ),
         },
         {
