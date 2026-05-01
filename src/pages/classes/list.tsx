@@ -13,12 +13,33 @@ import { CreateButton } from "@/components/refine-ui/buttons/create";
 import { useMemo, useState } from "react";
 import { DataTable } from "@/components/refine-ui/data-table/data-table";
 import { useTable } from "@refinedev/react-table";
-import { ClassDetails } from "@/types";
+import { ClassDetails , Schedule , Department} from "@/types";
 import type { ColumnDef } from "@tanstack/react-table";
 
 function ClassesList() {
   const [selectedClass, setSelectedClass] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const classFilter =
+    selectedClass === "all"
+      ? []
+      : [
+          {
+            field: "name",
+            operator: "eq" as const,
+            value: selectedClass,
+          },
+        ];
+  const classSearch =
+    searchQuery === ""
+      ? []
+      : [
+          {
+            field: "name",
+            operator: "contains" as const,
+            value: searchQuery,
+          },
+        ];
 
   const table = useTable<ClassDetails>({
     columns: useMemo<ColumnDef<ClassDetails>[]>(
@@ -119,7 +140,7 @@ function ClassesList() {
           size: 150,
           header: () => <p className="column-title ml-2">department</p>,
           cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
+            <p className="text-foreground">{getValue<Department>()}</p>
           ),
         },
         {
@@ -128,7 +149,7 @@ function ClassesList() {
           size: 200,
           header: () => <p className="column-title ml-2">schedules</p>,
           cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
+            <p className="text-foreground">{getValue<Schedule>()}</p>
           ),
         },
         {
@@ -145,15 +166,13 @@ function ClassesList() {
     ),
     refineCoreProps: {
       resource: "classes",
-      pagination : {pageSize: 10 , mode: "server"},
+      pagination: { pageSize: 10, mode: "server" },
       filters: {
-        
+        permanent: [...classFilter, ...classSearch],
       },
-      sorters :{
-        initial : [
-          {field : "id" , order : "desc" as const}
-        ]
-      }
+      sorters: {
+        initial: [{ field: "id", order: "desc" as const }],
+      },
     },
   });
 
@@ -171,12 +190,13 @@ function ClassesList() {
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
+              placeholder="Search by Class..."
               type="text"
               className="pl-10 w-full p-1 rounded-md border border-muted focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
           <Select value={selectedClass} onValueChange={setSelectedClass}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-45">
               <SelectValue placeholder="filter by class" />
             </SelectTrigger>
             <SelectContent>
