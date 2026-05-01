@@ -41,6 +41,13 @@ const options: CreateDataProviderOptions = {
         if (resource === "users") {
           if (field === "role") query.role = value;
         }
+
+        if (resource === "classes") {
+          if (field === "name") {
+            query.name = value;
+            query.search = value;
+          }
+        }
       }
       return query;
     },
