@@ -23,14 +23,12 @@ function ClassesList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("all");
   const [selectSubject, setSelectSubject] = useState("all");
-
   const { query: subjectQuery } = useList({
     resource: "subjects",
     pagination: {
       pageSize: 100,
     },
   });
-
   const { query: teacherQuery } = useList({
     resource: "users",
     filters: [
@@ -44,31 +42,28 @@ function ClassesList() {
       pageSize: 100,
     },
   });
-
   const subjects = subjectQuery?.data?.data ?? [];
   const subjectsLoading = subjectQuery.isLoading;
-
   const teachers = teacherQuery?.data?.data ?? [];
   const teachersLoading = teacherQuery.isLoading;
-
   const classSearch =
-    selectedTeacher === "all"
+    searchQuery === "all"
       ? []
       : [
           {
             field: "name",
             operator: "contains" as const,
-            value: selectedTeacher,
+            value: searchQuery,
           },
         ];
   const teacherFilter =
-    searchQuery === "all"
+    selectedTeacher === "all"
       ? []
       : [
           {
             field: "teacher",
             operator: "eq" as const,
-            value: searchQuery,
+            value: selectedTeacher,
           },
         ];
   const subjectFilter =
@@ -108,7 +103,6 @@ function ClassesList() {
             <p className="text-foreground">{getValue<string>()}</p>
           ),
         },
-
         {
           id: "status",
           accessorKey: "status",
@@ -210,7 +204,7 @@ function ClassesList() {
           <Select
             value={selectedTeacher}
             onValueChange={setSelectedTeacher}
-            disabled={subjectsLoading}
+            disabled={teachersLoading}
           >
             <SelectTrigger className="w-45">
               <SelectValue placeholder="filter by teacher" />
@@ -229,7 +223,7 @@ function ClassesList() {
           <Select
             value={selectSubject}
             onValueChange={setSelectSubject}
-            disabled={teachersLoading}
+            disabled={subjectsLoading}
           >
             <SelectTrigger className="w-45">
               <SelectValue placeholder="filter by subject" />
@@ -252,5 +246,4 @@ function ClassesList() {
     </ListView>
   );
 }
-
 export default ClassesList;
