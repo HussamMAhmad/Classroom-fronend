@@ -47,7 +47,7 @@ function ClassesList() {
   const teachers = teacherQuery?.data?.data ?? [];
   const teachersLoading = teacherQuery.isLoading;
   const classSearch =
-    searchQuery === "all"
+    searchQuery === ""
       ? []
       : [
           {
