@@ -43,9 +43,9 @@ const options: CreateDataProviderOptions = {
         }
 
         if (resource === "classes") {
-          if (field === "name") {
-            query.search = value;
-          }
+          if (field === "name") query.search = value;
+          if (field === "subject") query.subject = value;
+          if (field === "teacher") query.teacher = value;
         }
       }
       return query;

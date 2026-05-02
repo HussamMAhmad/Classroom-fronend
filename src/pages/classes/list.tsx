@@ -13,25 +13,41 @@ import { CreateButton } from "@/components/refine-ui/buttons/create";
 import { useMemo, useState } from "react";
 import { DataTable } from "@/components/refine-ui/data-table/data-table";
 import { useTable } from "@refinedev/react-table";
-import { ClassDetails} from "@/types";
+import { ClassDetails } from "@/types";
 import type { ColumnDef } from "@tanstack/react-table";
+import { useList } from "@refinedev/core";
+import { Badge } from "@/components/ui/badge.tsx";
+import { ShowButton } from "@/components/refine-ui/buttons/show.tsx";
 
 function ClassesList() {
-  const [selectedClass, setSelectedClass] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-
-  const classFilter =
-    selectedClass === "all"
-      ? []
-      : [
-          {
-            field: "name",
-            operator: "eq" as const,
-            value: selectedClass,
-          },
-        ];
+  const [selectedTeacher, setSelectedTeacher] = useState("all");
+  const [selectSubject, setSelectSubject] = useState("all");
+  const { query: subjectQuery } = useList({
+    resource: "subjects",
+    pagination: {
+      pageSize: 100,
+    },
+  });
+  const { query: teacherQuery } = useList({
+    resource: "users",
+    filters: [
+      {
+        field: "role",
+        operator: "eq",
+        value: "teacher",
+      },
+    ],
+    pagination: {
+      pageSize: 100,
+    },
+  });
+  const subjects = subjectQuery?.data?.data ?? [];
+  const subjectsLoading = subjectQuery.isLoading;
+  const teachers = teacherQuery?.data?.data ?? [];
+  const teachersLoading = teacherQuery.isLoading;
   const classSearch =
-    searchQuery === ""
+    searchQuery === "all"
       ? []
       : [
           {
@@ -40,24 +56,49 @@ function ClassesList() {
             value: searchQuery,
           },
         ];
-
+  const teacherFilter =
+    selectedTeacher === "all"
+      ? []
+      : [
+          {
+            field: "teacher",
+            operator: "eq" as const,
+            value: selectedTeacher,
+          },
+        ];
+  const subjectFilter =
+    selectSubject === "all"
+      ? []
+      : [
+          {
+            field: "subject",
+            operator: "eq" as const,
+            value: selectSubject,
+          },
+        ];
   const table = useTable<ClassDetails>({
     columns: useMemo<ColumnDef<ClassDetails>[]>(
       () => [
         {
-          id: "name",
-          accessorKey: "name",
-          size: 100,
-          header: () => <p className="column-title ml-2">name</p>,
+          id: "bannerUrl",
+          accessorKey: "bannerUrl",
+          size: 80,
+          header: () => <p className="column-title ml-2">bannerUrl</p>,
           cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
+            <div className="flex items-center justify-center ml-2">
+              <img
+                src={getValue<string>() || "/placeholder-class.png"}
+                alt="Class Banner"
+                className="w-10 h-10 rounded object-cover"
+              />
+            </div>
           ),
         },
         {
-          id: "description",
-          accessorKey: "description",
-          size: 300,
-          header: () => <p className="column-title ml-2">description</p>,
+          id: "name",
+          accessorKey: "name",
+          size: 200,
+          header: () => <p className="column-title ml-2">name</p>,
           cell: ({ getValue }) => (
             <p className="text-foreground">{getValue<string>()}</p>
           ),
@@ -67,6 +108,29 @@ function ClassesList() {
           accessorKey: "status",
           size: 100,
           header: () => <p className="column-title ml-2">status</p>,
+          cell: ({ getValue }) => {
+            const status = getValue<string>();
+            return (
+              <Badge variant={status === "active" ? "default" : "secondary"}>
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </Badge>
+            );
+          },
+        },
+        {
+          id: "subject",
+          accessorKey: "subject.name",
+          size: 150,
+          header: () => <p className="column-title ml-2">subject</p>,
+          cell: ({ getValue }) => (
+            <p className="text-foreground">{getValue<string>()}</p>
+          ),
+        },
+        {
+          id: "teacher",
+          accessorKey: "teacher.name",
+          size: 150,
+          header: () => <p className="column-title ml-2">teacher</p>,
           cell: ({ getValue }) => (
             <p className="text-foreground">{getValue<string>()}</p>
           ),
@@ -77,88 +141,31 @@ function ClassesList() {
           size: 100,
           header: () => <p className="column-title ml-2">capacity</p>,
           cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
+            <p className="text-foreground text-center">{getValue<string>()}</p>
           ),
         },
         {
-          id: "courseCode",
-          accessorKey: "courseCode",
-          size: 150,
-          header: () => <p className="column-title ml-2">courseCode</p>,
+          id: "description",
+          accessorKey: "description",
+          size: 140,
+          header: () => <p className="column-title ml-2">description</p>,
           cell: ({ getValue }) => (
             <p className="text-foreground">{getValue<string>()}</p>
           ),
         },
         {
-          id: "courseName",
-          accessorKey: "courseName",
-          size: 150,
-          header: () => <p className="column-title ml-2">courseName</p>,
-          cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
-          ),
-        },
-        {
-          id: "bannerCldPubId",
-          accessorKey: "bannerCldPubId",
-          size: 200,
-          header: () => <p className="column-title ml-2">bannerCldPubId</p>,
-          cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
-          ),
-        },
-        {
-          id: "bannerUrl",
-          accessorKey: "bannerUrl",
-          size: 200,
-          header: () => <p className="column-title ml-2">bannerUrl</p>,
-          cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
-          ),
-        },
-        {
-          id: "subject",
-          accessorKey: "subject",
-          size: 100,
-          header: () => <p className="column-title ml-2">subject</p>,
-          cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
-          ),
-        },
-        {
-          id: "teacher",
-          accessorKey: "teacher",
-          size: 100,
-          header: () => <p className="column-title ml-2">teacher</p>,
-          cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
-          ),
-        },
-        {
-          id: "department",
-          accessorKey: "department",
-          size: 150,
-          header: () => <p className="column-title ml-2">department</p>,
-          cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
-          ),
-        },
-        {
-          id: "schedules",
-          accessorKey: "schedules",
-          size: 200,
-          header: () => <p className="column-title ml-2">schedules</p>,
-          cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
-          ),
-        },
-        {
-          id: "inviteCode",
-          accessorKey: "inviteCode",
-          size: 200,
-          header: () => <p className="column-title ml-2">inviteCode</p>,
-          cell: ({ getValue }) => (
-            <p className="text-foreground">{getValue<string>()}</p>
+          id: "details",
+          size: 140,
+          header: () => <p className="column-title">Details</p>,
+          cell: ({ row }) => (
+            <ShowButton
+              resource="classes"
+              recordItemId={row.original.id}
+              variant="outline"
+              size="sm"
+            >
+              View
+            </ShowButton>
           ),
         },
       ],
@@ -168,7 +175,7 @@ function ClassesList() {
       resource: "classes",
       pagination: { pageSize: 10, mode: "server" },
       filters: {
-        permanent: [...classFilter, ...classSearch],
+        permanent: [...subjectFilter, ...teacherFilter, ...classSearch],
       },
       sorters: {
         initial: [{ field: "id", order: "desc" as const }],
@@ -189,21 +196,46 @@ function ClassesList() {
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
-              placeholder="Search by Class..."
+              placeholder="Search by Class name or invite code..."
               type="text"
               className="pl-10 w-full p-1 rounded-md border border-muted focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
-          <Select value={selectedClass} onValueChange={setSelectedClass}>
+          <Select
+            value={selectedTeacher}
+            onValueChange={setSelectedTeacher}
+            disabled={teachersLoading}
+          >
             <SelectTrigger className="w-45">
-              <SelectValue placeholder="filter by class" />
+              <SelectValue placeholder="filter by teacher" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="all">all Classes</SelectItem>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
+                <SelectItem value="all">All Teachers</SelectItem>
+                {teachers.map((tech) => (
+                  <SelectItem value={tech.name} key={tech.id}>
+                    {tech.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Select
+            value={selectSubject}
+            onValueChange={setSelectSubject}
+            disabled={subjectsLoading}
+          >
+            <SelectTrigger className="w-45">
+              <SelectValue placeholder="filter by subject" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="all">all Subjects</SelectItem>
+                {subjects.map((sub) => (
+                  <SelectItem value={sub.name} key={sub.id}>
+                    {sub.name}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -214,5 +246,4 @@ function ClassesList() {
     </ListView>
   );
 }
-
 export default ClassesList;
