@@ -6,7 +6,6 @@ import { ClassDetails } from "@/types";
 import { useShow } from "@refinedev/core";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import React, { useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { AdvancedImage } from "@cloudinary/react";
@@ -27,8 +26,8 @@ function Show() {
           {isLoading
             ? "loading class details..."
             : isError
-            ? "Faild to load class details..."
-            : "class details not found"}
+            ? "Failed to load class details..."
+            : "Class details not found"}
         </p>
       </ShowView>
     );
@@ -46,9 +45,9 @@ function Show() {
     teacherInitials || "NA",
   )}`;
 
-  const departmentName = classDetails.subject?.department?.name ?? "unkwon";
+  const departmentName = classDetails.subject?.department?.name ?? "Unknown";
   const departmentDetails =
-    classDetails.subject?.department?.description ?? "unkwon";
+    classDetails.subject?.department?.description ?? "Unknown";
 
   return (
     <ShowView className="class-view class-show">
@@ -63,7 +62,7 @@ function Show() {
             )}
           />
         ) : (
-          <div className="placehoder" />
+          <div className="placeholder" />
         )}
       </div>
       <Card className="details-card">
