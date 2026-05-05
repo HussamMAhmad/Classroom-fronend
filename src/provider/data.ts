@@ -75,6 +75,16 @@ const options: CreateDataProviderOptions = {
       return payload.data ?? [];
     },
   },
+
+  getOne : {
+    getEndpoint : ({resource , id}) => `${resource}/${id}`, 
+
+    mapResponse: async(response) => {
+      if (!response.ok) throw await buildHttpError(response);
+      const payload: CreateResponse = await response.json();
+      return payload.data ?? []; 
+    }
+  }
 };
 
 const { dataProvider } = createDataProvider(BACKEND_BASE_URL, options);
