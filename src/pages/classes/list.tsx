@@ -196,7 +196,7 @@ function ClassesList() {
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
-              placeholder="Search by Class name or invite code..."
+              placeholder="Search by name..."
               type="text"
               className="pl-10 w-full p-1 rounded-md border border-muted focus:border-primary focus:ring-1 focus:ring-primary"
             />

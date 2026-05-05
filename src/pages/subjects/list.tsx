@@ -40,7 +40,6 @@ function SubjectList() {
         },
       ]
     : [];
-
   const subjectTable = useTable<Subject>({
     columns: useMemo<ColumnDef<Subject>[]>(
       () => [
@@ -95,12 +94,10 @@ function SubjectList() {
       },
     },
   });
-
   return (
     <ListView>
       <Breadcrumb />
       <h1 className="page-title">Subject</h1>
-
       <div className="intro-row">
         <p>Quick access to essential metrics and management tools.</p>
         <div className="actions-row">
@@ -143,5 +140,4 @@ function SubjectList() {
     </ListView>
   );
 }
-
 export default SubjectList;
