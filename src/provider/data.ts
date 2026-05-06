@@ -82,7 +82,7 @@ const options: CreateDataProviderOptions = {
     mapResponse: async(response) => {
       if (!response.ok) throw await buildHttpError(response);
       const payload: CreateResponse = await response.json();
-      return payload.data ?? []; 
+      return payload.data ?? null; 
     }
   }
 };

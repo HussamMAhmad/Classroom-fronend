@@ -53,7 +53,7 @@ function Show() {
     <ShowView className="class-view class-show">
       <ShowViewHeader resource="classes" title="Class Details" />
       <div className="banner">
-        {classDetails.bannerUrl ? (
+        {classDetails.bannerCldPublic ? (
           <AdvancedImage
             alt="class banner"
             cldImg={bannerPhoto(
