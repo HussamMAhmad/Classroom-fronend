@@ -67,7 +67,7 @@ function App() {
                 >
                   <Route path="/" element={<Dashboard />} />
 
-                  <Route path="subjects" element={<SubjectList />}>
+                  <Route path="subjects">
                     <Route index element={<SubjectList />} />
                     <Route
                       path="/subjects/create"
