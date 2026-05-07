@@ -57,7 +57,6 @@ export const ALLOWED_TYPES = [
 
 const getEnvVar = (key: string): string => {
     const value = import.meta.env[key];
-    console.log(`Environment variable ${key}:`, value);
     if (!value) {
         throw new Error(`Missing environment variable: ${key}`);
     }
