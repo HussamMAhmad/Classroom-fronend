@@ -4,7 +4,7 @@ import { CreateView } from "@/components/refine-ui/views/create-view";
 import { useForm } from "@refinedev/react-hook-form";
 import { classSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
-import { useBack, useList } from "@refinedev/core";
+import { useList } from "@refinedev/core";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,8 +31,6 @@ import UploadWidget from "@/components/upload-widget/upload-widget";
 import { Subject, User } from "@/types";
 
 function ClassesCreate() {
-  const back = useBack();
-
   const { query: subjectsQuery } = useList<Subject>({
     resource: "subjects",
     pagination: {
@@ -56,8 +54,6 @@ function ClassesCreate() {
 
   const subjects = subjectsQuery?.data?.data || [];
   const subjectLoading = subjectsQuery.isLoading;
-
-  console.log("subjects is : ", subjects)
 
   const teachers = teachersQuery?.data?.data || [];
   const teachersLoading = teachersQuery.isLoading;
@@ -109,7 +105,6 @@ function ClassesCreate() {
       <h1 className="page-title">Create New Class</h1>
       <div className="intro-row">
         <p>Provide the required information to create a new class.</p>
-        <Button>Go Back</Button>
       </div>
       <Separator />
       <div className="my-4 flex items-center">

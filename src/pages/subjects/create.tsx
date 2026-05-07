@@ -2,7 +2,7 @@ import { Breadcrumb } from "@/components/refine-ui/layout/breadcrumb";
 import { CreateView } from "@/components/refine-ui/views/create-view";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import React from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormControl,
@@ -22,15 +22,27 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import UploadWidget from "@/components/upload-widget/upload-widget";
-import { Department, Subject, User, ClassDetails } from "@/types";
+import { Department, ClassDetails } from "@/types";
 import { useForm } from "@refinedev/react-hook-form";
 import { useList } from "@refinedev/core";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { subjectSchema } from "@/lib/schema";
 import * as z from "zod";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+} from "@/components/ui/command";
+import { Check } from "lucide-react";
 
 function SubjectCreate() {
+  const [open, setOpen] = useState(false);
+
   const { query: classQuery } = useList<ClassDetails>({
     resource: "classes",
     pagination: {
@@ -39,7 +51,7 @@ function SubjectCreate() {
   });
 
   const { query: departmentQuery } = useList<Department>({
-    resource: "classes",
+    resource: "departments",
     pagination: {
       pageSize: 100,
     },
@@ -57,6 +69,9 @@ function SubjectCreate() {
       action: "create",
       resource: "subjects",
     },
+    defaultValues: {
+      name: "",
+    },
   });
 
   const {
@@ -73,7 +88,6 @@ function SubjectCreate() {
       console.log("Error creating class:", e);
     }
   };
-
   return (
     <CreateView>
       <Breadcrumb />
@@ -81,7 +95,6 @@ function SubjectCreate() {
       <div className="">
         <div className="flex justify-between items-center p-3">
           <p>Provide the required information to create a new class.</p>
-          <Button>Go Back</Button>
         </div>
         <Separator />
         <div className="mt-3">
@@ -123,27 +136,92 @@ function SubjectCreate() {
                           <FormLabel>
                             Class <span className="text-orange-600">*</span>
                           </FormLabel>
+                          <div className="flex flex-col gap-4">
+                            <Button
+                              onClick={() => setOpen(true)}
+                              variant="outline"
+                              className="w-fit"
+                              type="button"
+                            >
+                              Open Menu
+                            </Button>
+                            <CommandDialog open={open} onOpenChange={setOpen}>
+                              <Command>
+                                <CommandInput placeholder="Search for Classes..." />
+                                <CommandList>
+                                  <CommandEmpty>No results found.</CommandEmpty>
+                                  <CommandGroup heading="Classes">
+                                    {classes.map((cl) => (
+                                      <CommandItem
+                                        disabled={classesLoading}
+                                        key={cl.id}
+                                        onSelect={() => {
+                                          const currentValue =
+                                            field.value || [];
+                                          const newValue =
+                                            currentValue.includes(cl.id)
+                                              ? currentValue.filter(
+                                                  (id) => id !== cl.id,
+                                                )
+                                              : [...currentValue, cl.id];
+                                          field.onChange(newValue);
+                                        }}
+                                        className="flex items-center gap-2 cursor-pointer"
+                                      >
+                                        <div
+                                          className={`h-4 w-4 border rounded flex items-center justify-center
+                  ${
+                    field.value?.includes(cl.id)
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-transparent"
+                  }
+                                                    `}
+                                        >
+                                          {field.value?.includes(cl.id) && (
+                                            <Check className="h-3 w-3" />
+                                          )}
+                                        </div>
+                                        {cl.name}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </CommandDialog>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={control}
+                      name="department"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Department{" "}
+                            <span className="text-orange-600">*</span>
+                          </FormLabel>
                           <Select
                             onValueChange={(value) =>
                               field.onChange(Number(value))
                             }
                             value={field.value?.toString() || ""}
-                            disabled={classesLoading}
+                            disabled={departmentsLoading}
                           >
                             <FormControl>
                               <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select a subject" />
+                                <SelectValue placeholder="Select a Department" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {classes.map((cl) => (
-                              <SelectItem
-                                key={cl.id}
-                                value={cl.id.toString()}
-                              >
-                                {cl.name}
-                              </SelectItem>
-                            ))}
+                              {departments.map((de) => (
+                                <SelectItem
+                                  key={de.id}
+                                  value={de.id.toString()}
+                                >
+                                  {de.name}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </FormItem>
@@ -181,5 +259,4 @@ function SubjectCreate() {
     </CreateView>
   );
 }
-
 export default SubjectCreate;
