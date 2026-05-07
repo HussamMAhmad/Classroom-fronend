@@ -17,7 +17,7 @@ export const subjectSchema = z.object({
     .string()
     .min(5, "Subject description must be at least 5 characters"),
   department: z
-    .number(),
+    .number({required_error : "please select a department"}).int().positive("please select a department"),
   className: z.array(z.number()),
 });
 
