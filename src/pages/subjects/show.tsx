@@ -28,18 +28,18 @@ function ShowSubject() {
   const subjectDetails = query.data?.data;
   const { isLoading, isError } = query;
 
-  console.log(subjectDetails?.classes)
+  console.log(subjectDetails?.classes);
 
   if (isLoading || isError || !subjectDetails) {
     return (
       <ShowView className="class-view class-show">
-        <ShowViewHeader resource="classes" title="Class Details" />
+        <ShowViewHeader resource="subjects" title="Class Details" />
         <p className="state-message">
           {isLoading
-            ? "loading class details..."
+            ? "loading subject details..."
             : isError
-            ? "Failed to load class details..."
-            : "Class details not found"}
+            ? "Failed to load subject details..."
+            : "Subject details not found"}
         </p>
       </ShowView>
     );
@@ -71,14 +71,22 @@ function ShowSubject() {
             <CalendarDays />
             <div className="subject-info">
               <p>Created At</p>
-              <h1>{dayjs(subjectDetails.createdAt).format("DD/MM/YYYY")}</h1>
+              <h1>
+                {subjectDetails.createdAt
+                  ? dayjs(subjectDetails.createdAt).format("DD/MM/YYYY")
+                  : "No Date"}
+              </h1>
             </div>
           </div>
           <div className="subject-details">
             <CalendarDays />
             <div className="subject-info">
               <p>Updated At</p>
-              <h1>{dayjs(subjectDetails.updatedAt).format("DD/MM/YYYY")}</h1>
+              <h1>
+                {subjectDetails.updatedAt
+                  ? dayjs(subjectDetails.updatedAt).format("DD/MM/YYYY")
+                  : "No Date"}
+              </h1>
             </div>
           </div>
         </CardContent>
@@ -95,8 +103,8 @@ function ShowSubject() {
                 <SelectLabel>Status</SelectLabel>
                 <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="Unactive">Unactive</SelectItem>
-                <SelectItem value="archived">archived</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="archived">Archived</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
