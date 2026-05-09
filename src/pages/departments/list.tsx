@@ -1,3 +1,4 @@
+import React from "react";
 import { Breadcrumb } from "@/components/refine-ui/layout/breadcrumb";
 import { ListView } from "@/components/refine-ui/views/list-view";
 import {
@@ -8,31 +9,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { DEPARTMENT_OPTIONS } from "@/constants";
 import { CreateButton } from "@/components/refine-ui/buttons/create";
 import { DataTable } from "@/components/refine-ui/data-table/data-table";
 import { useTable } from "@refinedev/react-table";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Subject } from "@/types";
+import { User } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { ShowButton } from "@/components/refine-ui/buttons/show";
 
-function SubjectList() {
+function DepartmentList() {
   const [searchQuery, setsearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [selectDepartment, setselectDepartment] = useState("all");
 
-  const departmentFilters =
-    selectedDepartment === "all"
+  const userFilter =
+    selectDepartment === "all"
       ? []
       : [
           {
             field: "department",
             operator: "eq" as const,
-            value: selectedDepartment,
+            value: selectDepartment,
           },
         ];
-  const searchFilters = searchQuery
+
+  const userSearch = searchQuery
     ? [
         {
           field: "name",
@@ -41,77 +43,52 @@ function SubjectList() {
         },
       ]
     : [];
-  const subjectTable = useTable<Subject>({
-    columns: useMemo<ColumnDef<Subject>[]>(
+
+  const userTable = useTable<User>({
+    columns: useMemo<ColumnDef<User>[]>(
       () => [
         {
           id: "code",
           accessorKey: "code",
-          size: 100,
-          header: () => <p className="column-title ml-2">Code</p>,
-          cell: ({ getValue }) => <Badge>{getValue<string>()}</Badge>,
+          size: 50,
+          header: () => <p className="column-title">Code</p>,
+          cell: ({ getValue }) => (
+            <Badge>{getValue<string>()}</Badge>
+          ),
         },
         {
           id: "name",
-          size: 200,
           accessorKey: "name",
+          size: 100,
           header: () => <p className="column-title">Name</p>,
           cell: ({ getValue }) => (
             <p className="text-foreground">{getValue<string>()}</p>
           ),
-          filterFn: "includesString",
-        },
-        {
-          id: "department",
-          accessorKey: "department.name",
-          size: 150,
-          header: () => <span className="column-title">Department</span>,
-          cell: ({ getValue }) => (
-            <Badge variant="secondary">{getValue<string>()}</Badge>
-          ),
         },
         {
           id: "description",
-          size: 300,
           accessorKey: "description",
+          size: 150,
           header: () => <p className="column-title">Description</p>,
           cell: ({ getValue }) => (
-            <span className="text-foreground">{getValue<string>()}</span>
-          ),
-        },
-        {
-          id: "details",
-          size: 140,
-          header: () => <p className="column-title">Details</p>,
-          cell: ({ row }) => (
-            <ShowButton
-              resource="subjects"
-              recordItemId={row.original.id}
-              variant="outline"
-              size="sm"
-            >
-              View
-            </ShowButton>
+            <Badge variant="secondary">{getValue<string>()}</Badge>
           ),
         },
       ],
       [],
     ),
     refineCoreProps: {
-      resource: "subjects",
+      resource: "departments",
       pagination: { pageSize: 10, mode: "server" },
       filters: {
-        permanent: [...departmentFilters, ...searchFilters],
-      },
-      sorters: {
-        initial: [{ field: "name", order: "desc" as const }],
+        permanent: [...userFilter, ...userSearch],
       },
     },
   });
   return (
     <ListView>
       <Breadcrumb />
-      <h1 className="page-title">Subject</h1>
+      <h1 className="page-title">Departments</h1>
       <div className="intro-row">
         <p>Quick access to essential metrics and management tools.</p>
         <div className="actions-row">
@@ -129,11 +106,11 @@ function SubjectList() {
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
             <Select
-              value={selectedDepartment}
-              onValueChange={setSelectedDepartment}
+              value={selectDepartment}
+              onValueChange={setselectDepartment}
             >
               <SelectTrigger>
-                <SelectValue placeholder="filter by department" />
+                <SelectValue placeholder="filter by role" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Departments</SelectItem>
@@ -150,8 +127,9 @@ function SubjectList() {
           </div>
         </div>
       </div>
-      <DataTable table={subjectTable} />
+      <DataTable table={userTable} />
     </ListView>
   );
 }
-export default SubjectList;
+
+export default DepartmentList;
