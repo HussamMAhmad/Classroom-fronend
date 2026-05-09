@@ -5,6 +5,8 @@ export type Subject = {
   description: string;
   department: Department;
   createdAt?: string;
+  updatedAt?: string;
+  classes: ClassDetails[];
 };
 
 export type ListResponse<T = unknown> = {

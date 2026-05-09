@@ -40,6 +40,7 @@ const options: CreateDataProviderOptions = {
 
         if (resource === "users") {
           if (field === "role") query.role = value;
+          if (field === "name") query.name = value;
         }
 
         if (resource === "classes") {
@@ -76,15 +77,15 @@ const options: CreateDataProviderOptions = {
     },
   },
 
-  getOne : {
-    getEndpoint : ({resource , id}) => `${resource}/${id}`, 
+  getOne: {
+    getEndpoint: ({ resource, id }) => `${resource}/${id}`,
 
-    mapResponse: async(response) => {
+    mapResponse: async (response) => {
       if (!response.ok) throw await buildHttpError(response);
       const payload: CreateResponse = await response.json();
-      return payload.data ?? null; 
-    }
-  }
+      return payload.data ?? null;
+    },
+  },
 };
 
 const { dataProvider } = createDataProvider(BACKEND_BASE_URL, options);
