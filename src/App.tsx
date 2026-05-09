@@ -13,7 +13,7 @@ import { useNotificationProvider } from "./components/refine-ui/notification/use
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
 import { dataProvider } from "./provider/data";
 import Dashboard from "./pages/dashboard";
-import { BookOpen, GraduationCap, Home, Users } from "lucide-react";
+import { BookOpen, GraduationCap, Home, Users ,  Landmark } from "lucide-react";
 import { Layout } from "./components/refine-ui/layout/layout";
 import SubjectList from "./pages/subjects/list";
 import SubjectCreate from "./pages/subjects/create";
@@ -22,6 +22,7 @@ import ClassesCreate from "./pages/classes/create";
 import ClassesList from "./pages/classes/list";
 import Show from "./pages/classes/show";
 import UsersList from "./pages/users/list";
+import DepartmentList from "./pages/departments/list";
 
 function App() {
   return (
@@ -65,6 +66,13 @@ function App() {
                   show: "/subjects/show/:id",
                   meta: { label: "Subjects", icon: <BookOpen /> },
                 },
+                   {
+                  name: "departments",
+                  list: "/departments",
+                  create: "/departments/create",
+                  show: "/departments/show/:id",
+                  meta: { label: "Departments", icon: <Landmark /> },
+                },
               ]}
             >
               <Routes>
@@ -79,6 +87,10 @@ function App() {
 
                   <Route path="users">
                     <Route index element={<UsersList />} />
+                  </Route>
+
+                  <Route path="departments">
+                    <Route index element={<DepartmentList />} />
                   </Route>
 
                   <Route path="subjects">
