@@ -95,6 +95,7 @@ export type Department = {
   id: number;
   name: string;
   description: string;
+  code: string;
 };
 
 export type ClassDetails = {

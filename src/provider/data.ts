@@ -50,7 +50,7 @@ const options: CreateDataProviderOptions = {
         }
 
         if (resource === "departments") {
-          if (field === "name") query.name = value;
+          if (field === "department") query.name = value;
           if (field === "name" || field === "code") query.search = value;
         }
       }

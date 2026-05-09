@@ -15,15 +15,15 @@ import { CreateButton } from "@/components/refine-ui/buttons/create";
 import { DataTable } from "@/components/refine-ui/data-table/data-table";
 import { useTable } from "@refinedev/react-table";
 import type { ColumnDef } from "@tanstack/react-table";
-import { User } from "@/types";
+import { Department } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { ShowButton } from "@/components/refine-ui/buttons/show";
 
 function DepartmentList() {
-  const [searchQuery, setsearchQuery] = useState("");
-  const [selectDepartment, setselectDepartment] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectDepartment, setSelectDepartment] = useState("all");
 
-  const userFilter =
+  const departmentFilter =
     selectDepartment === "all"
       ? []
       : [
@@ -34,7 +34,7 @@ function DepartmentList() {
           },
         ];
 
-  const userSearch = searchQuery
+  const departmentSearch = searchQuery
     ? [
         {
           field: "name",
@@ -44,8 +44,8 @@ function DepartmentList() {
       ]
     : [];
 
-  const userTable = useTable<User>({
-    columns: useMemo<ColumnDef<User>[]>(
+  const departmentTable = useTable<Department>({
+    columns: useMemo<ColumnDef<Department>[]>(
       () => [
         {
           id: "code",
@@ -81,7 +81,7 @@ function DepartmentList() {
       resource: "departments",
       pagination: { pageSize: 10, mode: "server" },
       filters: {
-        permanent: [...userFilter, ...userSearch],
+        permanent: [...departmentFilter, ...departmentSearch],
       },
     },
   });
@@ -100,14 +100,14 @@ function DepartmentList() {
               className="pl-10 w-full p-1 rounded-md border border-muted focus:border-primary focus:ring-1 focus:ring-primary"
               value={searchQuery}
               onChange={(e) => {
-                setsearchQuery(e.target.value);
+                setSearchQuery(e.target.value);
               }}
             />
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
             <Select
               value={selectDepartment}
-              onValueChange={setselectDepartment}
+              onValueChange={setSelectDepartment}
             >
               <SelectTrigger>
                 <SelectValue placeholder="filter by role" />
@@ -127,7 +127,7 @@ function DepartmentList() {
           </div>
         </div>
       </div>
-      <DataTable table={userTable} />
+      <DataTable table={departmentTable } />
     </ListView>
   );
 }
