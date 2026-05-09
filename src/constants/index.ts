@@ -1,66 +1,71 @@
-import { GraduationCap, School } from "lucide-react";
+import { GraduationCap, School, ShieldUser } from "lucide-react";
 
 export const USER_ROLES = {
-    STUDENT: "student",
-    TEACHER: "teacher",
-    ADMIN: "admin",
+  STUDENT: "student",
+  TEACHER: "teacher",
+  ADMIN: "admin",
 };
 
 export const ROLE_OPTIONS = [
-    {
-        value: USER_ROLES.STUDENT,
-        label: "Student",
-        icon: GraduationCap,
-    },
-    {
-        value: USER_ROLES.TEACHER,
-        label: "Teacher",
-        icon: School,
-    },
+  {
+    value: USER_ROLES.STUDENT,
+    label: "Student",
+    icon: GraduationCap,
+  },
+  {
+    value: USER_ROLES.TEACHER,
+    label: "Teacher",
+    icon: School,
+  },
+  {
+    value: USER_ROLES.ADMIN,
+    label: "Admin",
+    icon: ShieldUser,
+  },
 ];
 
 export const DEPARTMENTS = [
-    "Computer Science",
-    "Mathematics",
-    "Physics",
-    "Chemistry",
-    "Biology",
-    "English",
-    "History",
-    "Geography",
-    "Economics",
-    "Business Administration",
-    "Engineering",
-    "Psychology",
-    "Sociology",
-    "Political Science",
-    "Philosophy",
-    "Education",
-    "Fine Arts",
-    "Music",
-    "Physical Education",
-    "Law",
+  "Computer Science",
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "English",
+  "History",
+  "Geography",
+  "Economics",
+  "Business Administration",
+  "Engineering",
+  "Psychology",
+  "Sociology",
+  "Political Science",
+  "Philosophy",
+  "Education",
+  "Fine Arts",
+  "Music",
+  "Physical Education",
+  "Law",
 ] as const;
 
 export const DEPARTMENT_OPTIONS = DEPARTMENTS.map((dept) => ({
-    value: dept,
-    label: dept,
+  value: dept,
+  label: dept,
 }));
 
 export const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB in bytes
 export const ALLOWED_TYPES = [
-    "image/png",
-    "image/jpeg",
-    "image/jpg",
-    "image/webp",
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+  "image/webp",
 ];
 
 const getEnvVar = (key: string): string => {
-    const value = import.meta.env[key];
-    if (!value) {
-        throw new Error(`Missing environment variable: ${key}`);
-    }
-    return value;
+  const value = import.meta.env[key];
+  if (!value) {
+    throw new Error(`Missing environment variable: ${key}`);
+  }
+  return value;
 };
 
 // export const CLOUDINARY_UPLOAD_URL = getEnvVar("VITE_CLOUDINARY_UPLOAD_URL");
@@ -73,4 +78,6 @@ export const BACKEND_BASE_URL = getEnvVar("VITE_BACKEND_BASE_URL");
 
 // export const REFRESH_TOKEN_URL = `${BASE_URL}/refresh-token`;
 
-export const CLOUDINARY_UPLOAD_PRESET = getEnvVar("VITE_CLOUDINARY_UPLOAD_PRESET");
+export const CLOUDINARY_UPLOAD_PRESET = getEnvVar(
+  "VITE_CLOUDINARY_UPLOAD_PRESET",
+);

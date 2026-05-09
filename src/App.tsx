@@ -13,13 +13,15 @@ import { useNotificationProvider } from "./components/refine-ui/notification/use
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
 import { dataProvider } from "./provider/data";
 import Dashboard from "./pages/dashboard";
-import { BookOpen, GraduationCap, Home } from "lucide-react";
+import { BookOpen, GraduationCap, Home, Users } from "lucide-react";
 import { Layout } from "./components/refine-ui/layout/layout";
 import SubjectList from "./pages/subjects/list";
 import SubjectCreate from "./pages/subjects/create";
+import ShowSubject from "./pages/subjects/show";
 import ClassesCreate from "./pages/classes/create";
 import ClassesList from "./pages/classes/list";
 import Show from "./pages/classes/show";
+import UsersList from "./pages/users/list";
 
 function App() {
   return (
@@ -43,10 +45,11 @@ function App() {
                   meta: { label: "Home", icon: <Home /> },
                 },
                 {
-                  name: "subjects",
-                  list: "/subjects",
-                  create: "/subjects/create",
-                  meta: { label: "Subjects", icon: <BookOpen /> },
+                  name: "users",
+                  list: "/users",
+                  create: "/users/create",
+                  show: "users/show/:id",
+                  meta: { label: "Users", icon: <Users /> },
                 },
                 {
                   name: "classes",
@@ -54,6 +57,13 @@ function App() {
                   create: "/classes/create",
                   show: "/classes/show/:id",
                   meta: { label: "Classes", icon: <GraduationCap /> },
+                },
+                {
+                  name: "subjects",
+                  list: "/subjects",
+                  create: "/subjects/create",
+                  show: "/subjects/show/:id",
+                  meta: { label: "Subjects", icon: <BookOpen /> },
                 },
               ]}
             >
@@ -67,11 +77,19 @@ function App() {
                 >
                   <Route path="/" element={<Dashboard />} />
 
+                  <Route path="users">
+                    <Route index element={<UsersList />} />
+                  </Route>
+
                   <Route path="subjects">
                     <Route index element={<SubjectList />} />
                     <Route
                       path="/subjects/create"
                       element={<SubjectCreate />}
+                    />
+                    <Route
+                      path="/subjects/show/:id"
+                      element={<ShowSubject />}
                     />
                   </Route>
 

@@ -32,7 +32,6 @@ function Show() {
       </ShowView>
     );
   }
-
   const teacherName = classDetails.teacher?.name ?? "Unknown";
   const teacherInitials = teacherName
     .split(" ")

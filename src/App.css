@@ -306,6 +306,27 @@
       }
     }
   }
+  .subject-show{
+    .subject-box:first-child{
+      @apply mb-10
+    }
+    .subject-box{
+      @apply grid grid-cols-2 gap-y-20
+    }
+    .subject-details{
+      @apply flex; 
+      
+      .subject-info{
+        @apply ml-3 ;
+        > p {
+          @apply text-sm text-muted-foreground
+        }
+        > h1{
+          @apply font-bold;
+        }
+      }
+    }
+  }
 }
 
 :root {
