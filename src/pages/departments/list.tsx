@@ -52,9 +52,7 @@ function DepartmentList() {
           accessorKey: "code",
           size: 50,
           header: () => <p className="column-title">Code</p>,
-          cell: ({ getValue }) => (
-            <Badge>{getValue<string>()}</Badge>
-          ),
+          cell: ({ getValue }) => <Badge>{getValue<string>()}</Badge>,
         },
         {
           id: "name",
@@ -110,7 +108,7 @@ function DepartmentList() {
               onValueChange={setSelectDepartment}
             >
               <SelectTrigger>
-                <SelectValue placeholder="filter by role" />
+                <SelectValue placeholder="filter by department" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Departments</SelectItem>
@@ -127,7 +125,7 @@ function DepartmentList() {
           </div>
         </div>
       </div>
-      <DataTable table={departmentTable } />
+      <DataTable table={departmentTable} />
     </ListView>
   );
 }
