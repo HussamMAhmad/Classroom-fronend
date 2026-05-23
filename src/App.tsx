@@ -13,7 +13,7 @@ import { useNotificationProvider } from "./components/refine-ui/notification/use
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
 import { dataProvider } from "./provider/data";
 import Dashboard from "./pages/dashboard";
-import { BookOpen, GraduationCap, Home, Users ,  Landmark } from "lucide-react";
+import { BookOpen, GraduationCap, Home, Users, Landmark } from "lucide-react";
 import { Layout } from "./components/refine-ui/layout/layout";
 import SubjectList from "./pages/subjects/list";
 import SubjectCreate from "./pages/subjects/create";
@@ -66,7 +66,7 @@ function App() {
                   show: "/subjects/show/:id",
                   meta: { label: "Subjects", icon: <BookOpen /> },
                 },
-                   {
+                {
                   name: "departments",
                   list: "/departments",
                   create: "/departments/create",
