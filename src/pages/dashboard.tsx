@@ -40,6 +40,7 @@ export default function Dashboard() {
 
   const { query: teachersQuery } = useList<User>({
     resource: "users",
+    pagination: { mode: "off" },
     filters: [
       {
         field: "role",
@@ -57,8 +58,11 @@ export default function Dashboard() {
 
   const chartData = useMemo(() => {
     const groups = subjects.reduce((acc, item) => {
-      const month = dayjs(item.createdAt).format("MMM");
-      acc[month] = (acc[month] || 0) + 1;
+      if (!item.createdAt) return acc;
+      const createdAt = dayjs(item.createdAt);
+      if (!createdAt.isValid()) return acc;
+      const monthKey = createdAt.format("YYYY-MM");
+      acc[monthKey] = (acc[monthKey] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
