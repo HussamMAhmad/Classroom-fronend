@@ -133,7 +133,7 @@ export const SignInForm = () => {
               />
             </div>
             <div className={cn("flex", "flex-col", "gap-2")}>
-              <Label htmlFor="email">Role</Label>
+              <Label htmlFor="role">Role</Label>
               <Input
                 id="role"
                 type="text"

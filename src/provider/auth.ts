@@ -1,13 +1,13 @@
 import React from "react";
 import { AuthProvider } from "@refinedev/core";
-
+import { BACKEND_BASE_URL } from "@/constants";
 // to keep the example short and simple, we didn't send a request, and we save the token in localStorage.
 // in real world, you should send a request and token should be saved in more secure place.
 export const authProvider: AuthProvider = {
   login: async ({name , email, password , role}) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/sign-in/email",
+        `${BACKEND_BASE_URL}/api/auth/sign-in/email`,
         {
           method: "POST",
           headers: {
@@ -20,7 +20,6 @@ export const authProvider: AuthProvider = {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("email", data.email);
         return {
           success: true,
         };
