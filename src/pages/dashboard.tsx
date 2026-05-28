@@ -16,7 +16,6 @@ import {
 import { type ChartConfig } from "@/components/ui/chart";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -65,11 +64,12 @@ export default function Dashboard() {
       acc[monthKey] = (acc[monthKey] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-
-    return Object.entries(groups).map(([month, count]) => ({
-      month,
-      count,
-    }));
+    return Object.entries(groups)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([monthKey, count]) => ({
+        month: dayjs(`${monthKey}-01`).format("MMM YY"),
+        count,
+      }));
   }, [subjects]);
 
   const pieChartData = useMemo(() => {

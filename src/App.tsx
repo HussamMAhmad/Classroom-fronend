@@ -6,7 +6,7 @@ import routerProvider, {
   DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router";
+import { BrowserRouter, Outlet, Route, Routes , Navigate} from "react-router";
 import "./App.css";
 import { Toaster } from "./components/refine-ui/notification/toaster";
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
@@ -23,6 +23,11 @@ import ClassesList from "./pages/classes/list";
 import Show from "./pages/classes/show";
 import UsersList from "./pages/users/list";
 import DepartmentList from "./pages/departments/list";
+import { authProvider } from "./provider/auth";
+import { Authenticated } from "@refinedev/core";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SignInForm } from "@/components/refine-ui/form/sign-in-form";
+import { SignUpForm } from "@/components/refine-ui/form/sign-up-form";
 
 function App() {
   return (
@@ -32,6 +37,7 @@ function App() {
           <DevtoolsProvider>
             <Refine
               dataProvider={dataProvider}
+              authProvider={authProvider}
               notificationProvider={useNotificationProvider()}
               routerProvider={routerProvider}
               options={{
@@ -78,9 +84,15 @@ function App() {
               <Routes>
                 <Route
                   element={
-                    <Layout>
-                      <Outlet />
-                    </Layout>
+                    <Authenticated
+                      key="protected-layout"
+                      fallback={ <SignInForm />}
+                      loading={<Skeleton className="h-screen w-screen" />}
+                    >
+                      <Layout>
+                        <Outlet />
+                      </Layout>
+                    </Authenticated>
                   }
                 >
                   <Route path="/" element={<Dashboard />} />
@@ -110,6 +122,10 @@ function App() {
                     <Route path="/classes/create" element={<ClassesCreate />} />
                     <Route path="/classes/show/:id" element={<Show />} />
                   </Route>
+                </Route>
+                <Route>
+                  <Route path="/login" element={<SignInForm />} />
+                  <Route path="/register" element={ <SignUpForm />} />
                 </Route>
               </Routes>
               <Toaster />
