@@ -173,7 +173,7 @@ export const SignUpForm = () => {
                 required
                 value={role}
               >
-                <SelectTrigger className="w-full max-w-48">
+                <SelectTrigger id="role" className="w-full max-w-48">
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
