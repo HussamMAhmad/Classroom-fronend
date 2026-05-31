@@ -1,27 +1,29 @@
 import React from "react";
 import { AuthProvider } from "@refinedev/core";
 import { BACKEND_BASE_URL } from "@/constants";
-// to keep the example short and simple, we didn't send a request, and we save the token in localStorage.
-// in real world, you should send a request and token should be saved in more secure place.
+
 export const authProvider: AuthProvider = {
-  login: async ({name , email, password , role}) => {
+  login: async ({ name, email, password }) => {
     try {
-      const response = await fetch(
-        `${BACKEND_BASE_URL}/api/auth/sign-in/email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email, password , role }),
+      const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-in/email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ name, email, password }),
+        credentials: "include", // Include cookies in the request
+      });
 
       const data = await response.json();
 
       if (response.ok) {
         return {
           success: true,
+          redirectTo: "/",
+          successNotification: {
+          message: "successfully logged in",
+          description: "Welcome back to the admin panel",
+        },
         };
       }
 
@@ -45,22 +47,64 @@ export const authProvider: AuthProvider = {
     }
   },
   check: async () => {
-    const email = localStorage.getItem("email");
-    if (!email) {
+    try {
+      const response = await fetch(`${BACKEND_BASE_URL}/auth/get-session`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      });
+
+      if (!response.ok) {
+        return { authenticated: false, redirectTo: "/login" };
+      }
+      const data = await response.json();
+
+      if(data && data.user){
+        return { authenticated: true };
+      }
+
+      return { authenticated: false, redirectTo: "/login" };
+
+    } catch (error) {
       return {
         authenticated: false,
+        redirectTo: "/login",
       };
     }
-
-    return {
-      authenticated: true,
-    };
   },
   logout: async () => {
-    localStorage.removeItem("email");
-    return {
-      success: true,
-    };
+    try {
+      const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-out`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (response.ok) {
+        return {
+          success: true,
+          redirectTo: "/login",
+        };
+      }
+      return {
+        success: false,
+        error: {
+          name: "Logout Failed",
+          message: "Unable to logout. Please try again.",
+        },
+      };
+    } catch (error) {
+      console.error("Logout failed:", error);
+      return {
+        success: false,
+        error: {
+          name: "Logout Failed",
+          message: "Unable to logout due to a network error.",
+        },
+      };
+    }
   },
   getIdentity: async () => {
     const email = localStorage.getItem("email");

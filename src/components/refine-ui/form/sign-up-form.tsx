@@ -1,7 +1,5 @@
 "use client";
-
 import { useState } from "react";
-
 import { InputPassword } from "@/components/refine-ui/form/input-password";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,11 +20,26 @@ import {
   useRefineOptions,
   useRegister,
 } from "@refinedev/core";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const SignUpForm = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("");
+
+  const roles = [
+    { label: "Student", value: "student" },
+    { label: "Teacher", value: "teacher" },
+  ];
 
   const { open } = useNotification();
 
@@ -51,20 +64,10 @@ export const SignUpForm = () => {
     }
 
     register({
+      name,
       email,
       password,
-    });
-  };
-
-  const handleSignUpWithGoogle = () => {
-    register({
-      providerName: "google",
-    });
-  };
-
-  const handleSignUpWithGitHub = () => {
-    register({
-      providerName: "github",
+      role,
     });
   };
 
@@ -77,7 +80,7 @@ export const SignUpForm = () => {
         "justify-center",
         "px-6",
         "py-8",
-        "min-h-svh"
+        "min-h-svh",
       )}
     >
       <div className={cn("flex", "items-center", "justify-center", "gap-2")}>
@@ -97,7 +100,7 @@ export const SignUpForm = () => {
               "text-green-600",
               "dark:text-green-400",
               "text-3xl",
-              "font-semibold"
+              "font-semibold",
             )}
           >
             Sign up
@@ -105,7 +108,7 @@ export const SignUpForm = () => {
           <CardDescription
             className={cn("text-muted-foreground", "font-medium")}
           >
-            Welcome to lorem ipsum dolor.
+            Welcome to ClassRoom dashboard. Please enter your details to create an account.
           </CardDescription>
         </CardHeader>
 
@@ -113,6 +116,18 @@ export const SignUpForm = () => {
 
         <CardContent className={cn("px-0")}>
           <form onSubmit={handleSignUp}>
+            <div className={cn("flex", "flex-col", "gap-2", "mb-5")}>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder=""
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
             <div className={cn("flex", "flex-col", "gap-2")}>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -149,6 +164,30 @@ export const SignUpForm = () => {
               />
             </div>
 
+            <div
+              className={cn("relative", "flex", "flex-col", "gap-2", "mt-6")}
+            >
+              <Label htmlFor="role">Role</Label>
+              <Select
+                onValueChange={setRole}
+                required
+                value={role}
+              >
+                <SelectTrigger className="w-full max-w-48">
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {roles.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
             <Button
               type="submit"
               size="lg"
@@ -157,7 +196,7 @@ export const SignUpForm = () => {
                 "mt-6",
                 "bg-green-600",
                 "hover:bg-green-700",
-                "text-white"
+                "text-white",
               )}
             >
               Sign up
@@ -178,7 +217,7 @@ export const SignUpForm = () => {
                 "text-blue-600",
                 "dark:text-blue-400",
                 "font-semibold",
-                "underline"
+                "underline",
               )}
             >
               Sign in
