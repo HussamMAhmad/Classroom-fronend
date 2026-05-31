@@ -6,7 +6,7 @@ import routerProvider, {
   DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router";
-import { BrowserRouter, Outlet, Route, Routes , Navigate} from "react-router";
+import { BrowserRouter, Outlet, Route, Routes, Navigate } from "react-router";
 import "./App.css";
 import { Toaster } from "./components/refine-ui/notification/toaster";
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
@@ -28,6 +28,7 @@ import { Authenticated } from "@refinedev/core";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SignInForm } from "@/components/refine-ui/form/sign-in-form";
 import { SignUpForm } from "@/components/refine-ui/form/sign-up-form";
+import { CatchAllNavigate } from "@refinedev/react-router";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
                 syncWithLocation: true,
                 warnWhenUnsavedChanges: true,
                 projectId: "ASH1Cq-6xSiOd-73bCFb",
+                disableTelemetry: true,
               }}
               resources={[
                 {
@@ -86,7 +88,7 @@ function App() {
                   element={
                     <Authenticated
                       key="protected-layout"
-                      fallback={ <SignInForm />}
+                      fallback={<CatchAllNavigate to="/login" />}
                       loading={<Skeleton className="h-screen w-screen" />}
                     >
                       <Layout>
@@ -123,10 +125,11 @@ function App() {
                     <Route path="/classes/show/:id" element={<Show />} />
                   </Route>
                 </Route>
-                <Route>
-                  <Route path="/login" element={<SignInForm />} />
-                  <Route path="/register" element={ <SignUpForm />} />
-                </Route>
+
+                <Route path="/login" element={<SignInForm />} />
+                <Route path="/register" element={<SignUpForm />} />
+
+                <Route path="*" element={<CatchAllNavigate to="/login" />} />
               </Routes>
               <Toaster />
               <RefineKbar />

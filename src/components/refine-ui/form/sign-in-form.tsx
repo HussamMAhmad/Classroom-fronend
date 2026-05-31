@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { CircleHelp } from "lucide-react";
 import { InputPassword } from "@/components/refine-ui/form/input-password";
@@ -24,8 +23,6 @@ export const SignInForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [role, setRole] = useState("");
-
   const Link = useLink();
 
   const { title } = useRefineOptions();
@@ -38,20 +35,7 @@ export const SignInForm = () => {
     login({
       name,
       email,
-      password,
-      role,
-    });
-  };
-
-  const handleSignInWithGoogle = () => {
-    login({
-      providerName: "google",
-    });
-  };
-
-  const handleSignInWithGitHub = () => {
-    login({
-      providerName: "github",
+      password
     });
   };
 
@@ -111,7 +95,7 @@ export const SignInForm = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <div className={cn("flex", "flex-col", "gap-2")}>
+            <div className={cn("flex", "flex-col", "gap-2", "mt-4")}>
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -127,20 +111,10 @@ export const SignInForm = () => {
             >
               <Label htmlFor="password">Password</Label>
               <InputPassword
+                id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-              />
-            </div>
-            <div className={cn("flex", "flex-col", "gap-2")}>
-              <Label htmlFor="role">Role</Label>
-              <Input
-                id="role"
-                type="text"
-                placeholder=""
-                required
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
               />
             </div>
             <div
