@@ -129,7 +129,6 @@ function App() {
                 <Route path="/login" element={<SignInForm />} />
                 <Route path="/register" element={<SignUpForm />} />
 
-                <Route path="*" element={<CatchAllNavigate to="/login" />} />
               </Routes>
               <Toaster />
               <RefineKbar />

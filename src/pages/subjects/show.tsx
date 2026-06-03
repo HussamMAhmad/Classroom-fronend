@@ -28,8 +28,6 @@ function ShowSubject() {
   const subjectDetails = query.data?.data;
   const { isLoading, isError } = query;
 
-  console.log(subjectDetails?.classes);
-
   if (isLoading || isError || !subjectDetails) {
     return (
       <ShowView className="class-view class-show">

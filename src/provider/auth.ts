@@ -11,7 +11,7 @@ export const authProvider: AuthProvider = {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ name, email, password }),
-        credentials: "include", // Include cookies in the request
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -21,9 +21,9 @@ export const authProvider: AuthProvider = {
           success: true,
           redirectTo: "/",
           successNotification: {
-          message: "successfully logged in",
-          description: "Welcome back to the admin panel",
-        },
+            message: "successfully logged in",
+            description: "Welcome back to the admin panel",
+          },
         };
       }
 
@@ -63,12 +63,11 @@ export const authProvider: AuthProvider = {
       }
       const data = await response.json();
 
-      if(data && data.user){
+      if (data && data.user) {
         return { authenticated: true };
       }
 
       return { authenticated: false, redirectTo: "/login" };
-
     } catch (error) {
       return {
         authenticated: false,
@@ -112,8 +111,47 @@ export const authProvider: AuthProvider = {
       email,
     };
   },
-  register: async () => {
-    throw new Error("Not implemented");
+  register: async ({ name, email, password, role }) => {
+    try {
+      const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-up/email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password, role }),
+        credentials: "include",
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        return {
+          success: true,
+          redirectTo: "/",
+          successNotification: {
+            message: "successfully registered",
+            description: "Welcome back to the admin panel",
+          },
+        };
+      }
+
+      return {
+        success: false,
+        error: {
+          name: "SignUp Failed",
+          message:
+            data.message || "Invalid email or password. Please try again.",
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: {
+          name: "Network Error",
+          message:
+            "Unable to connect to the server. Please check your internet connection and try again.",
+        },
+      };
+    }
   },
   onError: async () => {
     throw new Error("Not implemented");

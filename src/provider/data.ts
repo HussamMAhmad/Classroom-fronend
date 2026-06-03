@@ -2,6 +2,16 @@ import { CreateDataProviderOptions, createDataProvider } from "@refinedev/rest";
 import { BACKEND_BASE_URL } from "@/constants";
 import { CreateResponse, ListResponse } from "@/types";
 
+const originalFetch = window.fetch;
+
+window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+  const modifiedInit = {
+    ...init,
+    credentials: "include" as const,
+  };
+  return originalFetch(input, modifiedInit);
+};
+
 const buildHttpError = async (response: Response) => {
   let message = "Request Failed";
   try {

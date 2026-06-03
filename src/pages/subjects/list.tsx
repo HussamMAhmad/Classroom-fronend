@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState , useCallback } from "react";
 import { DEPARTMENT_OPTIONS } from "@/constants";
 import { CreateButton } from "@/components/refine-ui/buttons/create";
 import { DataTable } from "@/components/refine-ui/data-table/data-table";
@@ -17,10 +17,25 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Subject } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { ShowButton } from "@/components/refine-ui/buttons/show";
+import debounce from "lodash.debounce";
 
 function SubjectList() {
   const [searchQuery, setsearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+
+  const debouncedSetSearchQuery = useCallback(
+    debounce((value : string) => {
+      setDebouncedSearchQuery(value);
+    }, 500)
+  ,[])
+
+const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+  
+  setsearchQuery(value);
+  debouncedSetSearchQuery(value);
+};
 
   const departmentFilters =
     selectedDepartment === "all"
@@ -32,15 +47,16 @@ function SubjectList() {
             value: selectedDepartment,
           },
         ];
-  const searchFilters = searchQuery
+  const searchFilters = debouncedSearchQuery
     ? [
         {
           field: "name",
           operator: "contains" as const,
-          value: searchQuery,
+          value: debouncedSearchQuery,
         },
       ]
     : [];
+
   const subjectTable = useTable<Subject>({
     columns: useMemo<ColumnDef<Subject>[]>(
       () => [
@@ -122,9 +138,7 @@ function SubjectList() {
               placeholder="Search by name..."
               className="pl-10 w-full p-1 rounded-md border border-muted focus:border-primary focus:ring-1 focus:ring-primary"
               value={searchQuery}
-              onChange={(e) => {
-                setsearchQuery(e.target.value);
-              }}
+              onChange={handleSearchChange}
             />
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
