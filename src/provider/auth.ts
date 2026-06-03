@@ -129,7 +129,7 @@ export const authProvider: AuthProvider = {
           redirectTo: "/",
           successNotification: {
             message: "successfully registered",
-            description: "Welcome back to the admin panel",
+            description: "Welcome to the admin panel",
           },
         };
       }
@@ -142,7 +142,7 @@ export const authProvider: AuthProvider = {
             data.message || "Invalid email or password. Please try again.",
         },
       };
-    } catch (error) {
+    } catch {
       return {
         success: false,
         error: {

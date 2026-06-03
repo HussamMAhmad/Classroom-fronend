@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import React, { useMemo, useState , useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { DEPARTMENT_OPTIONS } from "@/constants";
 import { CreateButton } from "@/components/refine-ui/buttons/create";
 import { DataTable } from "@/components/refine-ui/data-table/data-table";
@@ -25,17 +25,24 @@ function SubjectList() {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
   const debouncedSetSearchQuery = useCallback(
-    debounce((value : string) => {
+    debounce((value: string) => {
       setDebouncedSearchQuery(value);
-    }, 500)
-  ,[])
+    }, 500),
+    [],
+  );
 
-const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
-  
-  setsearchQuery(value);
-  debouncedSetSearchQuery(value);
-};
+  useEffect(() => {
+    return () => {
+      debouncedSetSearchQuery.cancel();
+    };
+  }, [debouncedSetSearchQuery]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    setsearchQuery(value);
+    debouncedSetSearchQuery(value);
+  };
 
   const departmentFilters =
     selectedDepartment === "all"
