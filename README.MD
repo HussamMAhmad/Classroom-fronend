@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="src/docs/Gemini_Generated_Image_z8bb3az8bb3az8bb.png" alt="Educational Platform Architecture" width="850">
+</p>
+
 # 🎓 Educational Management Platform - Frontend
 
 A sophisticated, type-safe administrative dashboard built using **React**, **TypeScript**, and the **Refine** framework. This frontend application acts as the control center for the educational platform, offering dynamic CRUD operations, role-based access control, and highly optimized network request handling.
