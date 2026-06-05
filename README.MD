@@ -1,48 +1,34 @@
-# classroom-frontend
+# 🎓 Educational Management Platform - Frontend
 
-<div align="center" style="margin: 30px;">
-    <a href="https://refine.dev">
-    <img alt="refine logo" src="https://refine.ams3.cdn.digitaloceanspaces.com/readme/refine-readme-banner.png">
-    </a>
-</div>
-<br/>
+A sophisticated, type-safe administrative dashboard built using **React**, **TypeScript**, and the **Refine** framework. This frontend application acts as the control center for the educational platform, offering dynamic CRUD operations, role-based access control, and highly optimized network request handling.
 
-This [Refine](https://github.com/refinedev/refine) project was generated with [create refine-app](https://github.com/refinedev/refine/tree/master/packages/create-refine-app).
+Designed to connect seamlessly with a secure Node.js/Express backend powered by **Better Auth** using cookie-based sessions.
 
-## Getting Started
+---
 
-A React Framework for building internal tools, admin panels, dashboards & B2B apps with unmatched flexibility ✨
+## 🚀 Key Features
 
-Refine's hooks and components simplifies the development process and eliminates the repetitive tasks by providing industry-standard solutions for crucial aspects of a project, including authentication, access control, routing, networking, state management, and i18n.
+* **Refine CRUD Core:** Fully automated and highly customizable interfaces for managing **Subjects**, **Classes**, **Users**, **Roles**, and **Schedules**.
+* **Dynamic Role-Based Access Control (RBAC):** Integrated using Refine's `accessControlProvider`. Automatically hides/disables UI components (like action buttons, restricted data tables) and strictly guards client-side routing based on authenticated user roles (`Guest`, `Student`, `Teacher`, `Admin`).
+* **Optimized Live Search (Debounce + Cleanup):** Implements smart debouncing (500ms delay) on search input fields to minimize API stress. Includes explicit hook cleanups upon component unmount to completely eliminate React state update memory leaks.
+* **Secure Scoped Cookie Bridge:** Leverages a localized native `fetch` interceptor that automatically injects `credentials: "include"` into every outbound request, ensuring seamless session validation via HTTP-only cookies.
+* **Type Safety:** 100% strict TypeScript coverage for all data models, API payloads (`ListResponse`, `CreateResponse`), and data provider configurations.
 
-## Available Scripts
+## 🛠️ Tech Stack
 
-### Running the development server.
+* **Core:** React 18+, TypeScript
+* **Framework:** [Refine Framework](https://refine.dev/) (Enterprise-grade internal tool framework)
+* **Build Tool:** Vite
 
-```bash
-    npm run dev
-```
+## 📁 Project Structure
 
-### Building for production.
-
-```bash
-    npm run build
-```
-
-### Running the production server.
-
-```bash
-    npm run start
-```
-
-## Learn More
-
-To learn more about **Refine**, please check out the [Documentation](https://refine.dev/docs)
-
-- **REST Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
-- **shadcn/ui** [Docs](https://refine.dev/docs/guides-concepts/general-concepts/#headless-concept)
-- **React Router** [Docs](https://refine.dev/docs/core/providers/router-provider/)
-
-## License
-
-MIT
+```text
+src/
+├── constants/       # Global constants (e.g., BACKEND_BASE_URL)
+├── providers/       # Custom Refine Providers (dataProvider, accessControlProvider)
+├── hooks/           # Custom React hooks (useDebounce, useSubjectsList, etc.)
+├── components/      # Reusable UI components (Sidebar, Layout, CanAccess wrappers)
+├── pages/           # Resource pages (Subjects, Classes, Dashboard, Users)
+├── types/           # Strict TypeScript interfaces and type definitions
+├── App.tsx          # Main application configuration & Refine initialization
+└── main.tsx         # Application entry point
